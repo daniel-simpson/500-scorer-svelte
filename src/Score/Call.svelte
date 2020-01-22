@@ -8,12 +8,6 @@
   console.log(suit);
 </script>
 
-<style>
-  .red {
-    color: red;
-  }
-</style>
-
 <span>
   {amount}
   <Suit {suit} />

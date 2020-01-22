@@ -24,8 +24,10 @@
   function onBidComplete(amount, suit) {
     dispatch("bidComplete", {
       player: selectedPlayer,
-      amount: amount,
-      suit
+      team: null, //players.getTeamByPlayer(selectedPlayer),
+      amount,
+      suit,
+      score: suit.points + (amount - 6) * 100
     });
   }
 </script>

@@ -56,7 +56,9 @@
 
   function roundComplete() {
     // Add score to current bid and push to rounds
-    rounds;
+    roundsStore.addRound({
+      ...currentBid
+    });
 
     //TODO: If someone's score is +500 or -500, emit event
     if (false) {
