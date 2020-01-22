@@ -8,7 +8,6 @@
   let error = "";
 
   function addPlayerEnter(event) {
-    console.log(event);
     if (event.keyCode == 13) {
       addPlayer();
     }
@@ -50,16 +49,19 @@
   }
 </style>
 
-<div>
+<section>
+  <h1>Players</h1>
+  <p>Please enter player details to continue...</p>
+
   <div>
     <input type="text" bind:value={playerName} on:keyup={addPlayerEnter} />
     <button on:click={addPlayer}>Add Player</button>
     <p class="error">{error}</p>
   </div>
 
-  {#if players && players.length > 0}
+  {#if $players && $players.length > 0}
     <ul>
-      {#each players as player}
+      {#each $players as player}
         <li on:click={() => removePlayer(player)}>{player}</li>
       {/each}
     </ul>
@@ -72,4 +74,4 @@
       Let's Play!
     </button>
   {/if}
-</div>
+</section>

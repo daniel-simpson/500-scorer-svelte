@@ -1,8 +1,5 @@
 <script>
-  export let players;
-  export let dealerIndex;
-
-  $: dealer = players[dealerIndex];
+  import players from "./player-store";
 </script>
 
 <style>
@@ -19,13 +16,7 @@
 </style>
 
 <ul>
-  {#each players as player}
-    <li class="team">
-      {player}
-      <!-- {#if player === dealer}
-        &nbsp;-&nbsp;
-        <strong>DEALER</strong>
-      {/if} -->
-    </li>
+  {#each $players as player}
+    <li class="team">{player}</li>
   {/each}
 </ul>

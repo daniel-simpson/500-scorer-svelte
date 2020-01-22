@@ -1,13 +1,12 @@
 <script>
+  import dealer from "./Player/dealer-store";
+
   import PlayerEntry from "./Player/Entry.svelte";
   import PlayerTable from "./Player/TableView.svelte";
   import Scorecard from "./Score/Scorecard.svelte";
 
-  let status = "entry";
-  $: console.log("Toggling mode", status);
-
-  let dealerIndex = 0;
-  $: console.log("Dealer index is changing", dealerIndex);
+  let status = "gameplay"; //"new-game";
+  $: console.log("Dealer", $dealer);
 
   function entryComplete() {
     status = "gameplay";
@@ -22,14 +21,14 @@
   main {
     text-align: center;
     padding: 1em;
-    max-width: 240px;
     margin: 0 auto;
+    max-width: 900px;
   }
 
   h1 {
     color: #ff3e00;
     text-transform: uppercase;
-    font-size: 4rem;
+    font-size: 2rem;
     font-weight: 100;
   }
 
@@ -50,10 +49,7 @@
 
   @media (min-width: 640px) {
     h1 {
-      font-size: 2rem;
-    }
-    main {
-      max-width: none;
+      font-size: 4rem;
     }
   }
 </style>
@@ -64,8 +60,7 @@
   {#if status === 'new-game'}
     <PlayerEntry on:entry-complete={entryComplete} />
   {:else if status === 'gameplay'}
-    <PlayerTable />
-
+    <!-- <PlayerTable /> -->
     <Scorecard on:game-finish={gameComplete} />
   {:else if status === 'complete'}
     <p>Congratulations</p>

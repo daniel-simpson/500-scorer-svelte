@@ -71,9 +71,9 @@ button:focus {
 }
 
 .team {
-  color: blue;
+  color: black;
 }
 
-.team:nth-child(2n) {
+.team:nth-child(2n + 1) {
   color: red;
 }
