@@ -32,9 +32,11 @@
     const latestRound = rounds[rounds.length - 1];
     if (latestRound.blackScore >= 500 || latestRound.redScore <= -500) {
       currentBid = null;
+      isBidding = false;
       dispatch("game-finish", "black");
     } else if (latestRound.redScore >= 500 || latestRound.blackScore <= -500) {
       currentBid = null;
+      isBidding = false;
       dispatch("game-finish", "red");
     }
   });

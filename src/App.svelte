@@ -6,14 +6,15 @@
   import Scorecard from "./Score/Scorecard.svelte";
 
   let status = "gameplay"; //"new-game";
-  $: console.log("Dealer", $dealer);
+  let winningTeam = "";
 
   function entryComplete() {
     status = "gameplay";
   }
 
-  function gameComplete() {
+  function gameComplete(event) {
     status = "complete";
+    winningTeam = event.detail;
   }
 </script>
 
@@ -32,21 +33,6 @@
     font-weight: 100;
   }
 
-  .input-section {
-    display: flex;
-    width: 200%;
-    overflow: hidden;
-    transition: margin-left 700ms;
-  }
-
-  .input-section.scoring {
-    margin-left: auto;
-  }
-
-  .input-section > * {
-    width: 100%;
-  }
-
   @media (min-width: 640px) {
     h1 {
       font-size: 4rem;
@@ -59,11 +45,11 @@
 
   {#if status === 'new-game'}
     <PlayerEntry on:entry-complete={entryComplete} />
-  {:else if status === 'gameplay'}
-    <!-- <PlayerTable /> -->
+  {:else if status === 'gameplay' || status === 'complete'}
     <Scorecard on:game-finish={gameComplete} />
-  {:else if status === 'complete'}
-    <p>Congratulations</p>
   {/if}
 
+  {#if status === 'complete'}
+    <p>Congratulations team {winningTeam}!</p>
+  {/if}
 </main>
