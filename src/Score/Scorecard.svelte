@@ -1,49 +1,49 @@
 <script>
   import { createEventDispatcher, onDestroy } from "svelte";
-  import { getEvenElements, getOddElements } from "../util";
 
-  import playerStore from "../Player/player-store";
   import roundsStore from "./rounds-store";
+  import players from "../Player/player-store";
+  import { blackTeamStore, redTeamStore } from "../Player/team-store";
   import dealer from "../Player/dealer-store";
 
   import Bid from "./Bid.svelte";
   import Call from "./Call.svelte";
 
+  $: numberOfPlayersPerTeam = $players.length / 2;
   let dispatch = createEventDispatcher();
+  let isBidding = true;
+  let currentBid = null;
 
-  let players = [];
   let rounds = [];
-  const unsubscribePlayers = playerStore.subscribe(items => {
-    players = items;
-  });
   const unsubscribeRounds = roundsStore.subscribe(items => {
     rounds = items;
+
+    isBidding = true;
+    currentBid = {
+      index: rounds.length + 1,
+      dealer: $dealer,
+      blackTricks: 4, //todo use actual init values
+      redTricks: 5
+    };
+
+    // If no rounds are complete (first load) then bail
+    if (rounds.length === 0) return;
+
+    const latestRound = rounds[rounds.length - 1];
+    if (latestRound.blackScore >= 500 || latestRound.redScore <= -500) {
+      currentBid = null;
+      dispatch("game-finish", "black");
+    } else if (latestRound.redScore >= 500 || latestRound.blackScore <= -500) {
+      currentBid = null;
+      dispatch("game-finish", "red");
+    }
   });
 
   onDestroy(() => {
-    if (unsubscribePlayers) {
-      unsubscribePlayers();
-    }
     if (unsubscribeRounds) {
       unsubscribeRounds();
     }
   });
-
-  $: teamBlack = getEvenElements(players);
-  $: teamRed = getOddElements(players);
-  $: numberOfPlayersPerTeam = players.length / 2;
-
-  function resetCurrentBid() {
-    return {
-      index: rounds.length + 1,
-      dealer: $dealer,
-      blackTricks: 4,
-      redTricks: 5
-    };
-  }
-
-  let isBidding = true;
-  let currentBid = resetCurrentBid();
 
   function bidComplete(call) {
     console.log("in bidComplete", call);
@@ -59,17 +59,6 @@
     roundsStore.addRound({
       ...currentBid
     });
-
-    //TODO: If someone's score is +500 or -500, emit event
-    if (false) {
-      currentBid = null;
-      dispatch("game-finish");
-    } else {
-      isBidding = true;
-      // TODO: scroll to bidding section
-
-      currentBid = resetCurrentBid();
-    }
   }
 </script>
 
@@ -115,11 +104,11 @@
 
       <tr>
 
-        {#each teamBlack as player}
+        {#each $blackTeamStore as player (player)}
           <td>{player}</td>
         {/each}
 
-        {#each teamRed as player}
+        {#each $redTeamStore as player (player)}
           <td>{player}</td>
         {/each}
       </tr>
@@ -127,7 +116,7 @@
 
     <!-- Display Rounds -->
     <tbody>
-      {#each rounds as round}
+      {#each rounds as round (round.index)}
         <tr>
           <td>{round.index}</td>
           <td>{round.dealer}</td>

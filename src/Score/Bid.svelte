@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import players from "../Player/player-store";
+  import { blackTeamStore } from "../Player/team-store";
 
   import Suit from "./Suit.svelte";
 
@@ -20,11 +21,13 @@
   ];
 
   let selectedPlayer;
+  $: selectedTeam =
+    $blackTeamStore.indexOf(selectedPlayer) > -1 ? "black" : "red";
 
   function onBidComplete(amount, suit) {
     dispatch("bidComplete", {
       player: selectedPlayer,
-      team: null, //players.getTeamByPlayer(selectedPlayer),
+      team: selectedTeam,
       amount,
       suit,
       score: suit.points + (amount - 6) * 100
