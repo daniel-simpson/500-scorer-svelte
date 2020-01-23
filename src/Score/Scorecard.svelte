@@ -22,8 +22,8 @@
     currentBid = {
       index: rounds.length + 1,
       dealer: $dealer,
-      blackTricks: 4, //todo use actual init values
-      redTricks: 5
+      blackTricks: 0,
+      redTricks: 0
     };
 
     // If no rounds are complete (first load) then bail

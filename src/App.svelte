@@ -5,7 +5,7 @@
   import PlayerTable from "./Player/TableView.svelte";
   import Scorecard from "./Score/Scorecard.svelte";
 
-  let status = "gameplay"; //"new-game";
+  let status = "new-game";
   let winningTeam = "";
 
   function entryComplete() {

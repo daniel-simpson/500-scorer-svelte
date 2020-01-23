@@ -1,12 +1,6 @@
 import { writable } from "svelte/store";
 
-const playerStore = writable([
-  //TODO: remove game initial test data
-  "Dan",
-  "Stini",
-  "Jess",
-  "Tim"
-]);
+const playerStore = writable([]);
 
 export default {
   subscribe: playerStore.subscribe,
