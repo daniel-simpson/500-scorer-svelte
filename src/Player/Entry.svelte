@@ -1,11 +1,25 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-  import players from "./player-store.js";
+  import { createEventDispatcher, onDestroy } from "svelte";
+  import playersStore from "./player-store.js";
 
   const dispatch = createEventDispatcher();
 
   let playerName = "";
   let error = "";
+  let canSubmit = false;
+  let players = [];
+
+  let unsubscribe = playersStore.subscribe(items => {
+    players = items;
+
+    //TODO: only allow players.length to be a multiple of 2
+    canSubmit = players.length % 2 === 0;
+  });
+  onDestroy(() => {
+    if (unsubscribe) {
+      unsubscribe();
+    }
+  });
 
   function addPlayerEnter(event) {
     if (event.keyCode == 13) {
@@ -19,19 +33,19 @@
       return;
     }
 
-    if ($players.includes(playerName)) {
+    if (players.includes(playerName)) {
       error = "Player name already exists.  Please enter a unique player name";
       return;
     }
 
     error = "";
 
-    players.addPlayer(playerName);
+    playersStore.addPlayer(playerName);
     playerName = "";
   }
 
   function removePlayer(player) {
-    players.removePlayer(player);
+    playersStore.removePlayer(player);
   }
 </script>
 
@@ -59,15 +73,16 @@
     <p class="error">{error}</p>
   </div>
 
-  {#if $players && $players.length > 0}
+  {#if players && players.length > 0}
     <ul>
-      {#each $players as player}
+      {#each players as player}
         <li on:click={() => removePlayer(player)}>{player}</li>
       {/each}
     </ul>
     <small>Note: Click a player to remove them</small>
 
     <button
+      disabled={!canSubmit}
       on:click={() => {
         dispatch('entry-complete');
       }}>
