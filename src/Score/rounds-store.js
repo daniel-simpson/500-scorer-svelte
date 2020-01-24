@@ -13,8 +13,8 @@ export default {
       let blackScore = previousRound ? previousRound.blackScore : 0;
       let redScore = previousRound ? previousRound.redScore : 0;
 
-      //TODO add 'team' to call object
       if (call.team == "black") {
+        //TODO: handle miseres
         if (blackTricks >= call.amount) {
           blackScore += call.score;
         } else {
@@ -29,8 +29,6 @@ export default {
         }
         blackScore += 10 * blackTricks;
       }
-
-      console.log(`Computed score as  Black: ${blackScore} Red: ${redScore}`);
 
       return [
         ...rounds,

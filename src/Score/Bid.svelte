@@ -30,7 +30,7 @@
       team: selectedTeam,
       amount,
       suit,
-      score: suit.points + (amount - 6) * 100
+      score: suit.points + (amount - 6) * 100 //TODO: handle miseres
     });
   }
 </script>
