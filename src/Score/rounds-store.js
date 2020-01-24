@@ -14,20 +14,26 @@ export default {
       let redScore = previousRound ? previousRound.redScore : 0;
 
       if (call.team == "black") {
-        //TODO: handle miseres
-        if (blackTricks >= call.amount) {
+        // Misere
+        if (call.amount === 0) {
+          blackScore = blackTricks === 0 ? call.score : -call.score;
+        } else if (blackTricks >= call.amount) {
           blackScore += call.score;
+          redScore += 10 * redTricks;
         } else {
           blackScore -= call.score;
+          redScore += 10 * redTricks;
         }
-        redScore += 10 * redTricks;
       } else {
-        if (redTricks >= call.amount) {
+        if (call.amount === 0) {
+          redScore = redTricks === 0 ? call.score : -call.score;
+        } else if (redTricks >= call.amount) {
           redScore += call.score;
+          blackScore += 10 * blackTricks;
         } else {
           redScore -= call.score;
+          blackScore += 10 * blackTricks;
         }
-        blackScore += 10 * blackTricks;
       }
 
       return [

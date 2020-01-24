@@ -11,8 +11,6 @@
 
   let unsubscribe = playersStore.subscribe(items => {
     players = items;
-
-    //TODO: only allow players.length to be a multiple of 2
     canSubmit = players.length % 2 === 0;
   });
   onDestroy(() => {
