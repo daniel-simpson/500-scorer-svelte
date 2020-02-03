@@ -1,23 +1,33 @@
 <script>
   import PlayerEntry from "./Player/Entry.svelte";
   import fivehundred from "./Games/500/500.svelte";
+  import buggerme from "./Games/BuggerMe/BuggerMe.svelte";
+  import canasta from "./Games/Canasta/Canasta.svelte";
 
-  const gameList = [
+  let gameList = [
     {
       name: "500",
-      needsEvenPlayers: true,
+      requiredPlayers: [2, 4, 6],
       component: fivehundred
-    },
-    {
-      name: "Bugger Me!",
-      needsEvenPlayers: false,
-      component: null
     }
+    // {
+    //   name: "Bugger Me!",
+    //   requiredPlayers: [],
+    //   component: buggerme
+    // },
+    // {
+    //   name: "Canasta",
+    //   requiredPlayers: [2, 4],
+    //   component: canasta
+    // }
   ];
 
-  let game = {};
+  let game = gameList.length === 1 ? gameList[0] : undefined;
   let status = "new-game";
   let winner = "";
+
+  $: title =
+    game != undefined ? `Playing ${game.name}...` : "Card games, baby!";
 
   function gameSelected(selectedGame) {
     game = selectedGame;
@@ -55,25 +65,33 @@
   }
 </style>
 
-<main>
-  <h1>Card games, baby!</h1>
+<svelte:head>
+  <title>{title}</title>
+</svelte:head>
 
-  <!--Choose game-->
-  {#if !game || !game.name}
+<main>
+  <h1>{title}</h1>
+
+  {#if game === undefined}
     <p>Select a game:</p>
-    <ul>
-      {#each gameList as gameItem}
-        <li on:click={gameSelected(gameItem)}>{gameList.name}</li>
-      {/each}
-    </ul>
+    {#each gameList as gameItem}
+      <button on:click={() => gameSelected(gameItem)}>{gameItem.name}</button>
+    {/each}
   {:else}
-    <small on:click{()>{(game = {})}>Select a different game</small>
+    {#if gameList.length !== 1}
+      <small
+        on:click={() => {
+          game = undefined;
+        }}>
+        Select a different game
+      </small>
+    {/if}
     <h2>{game.name}</h2>
 
     {#if status === 'new-game'}
       <!--Add players-->
       <PlayerEntry
-        needsEvenPlayers={game.needsEvenPlayers}
+        requiredPlayers={game.requiredPlayers}
         on:entry-complete={entryComplete} />
     {:else if status === 'gameplay'}
       <!-- Gameplay-->

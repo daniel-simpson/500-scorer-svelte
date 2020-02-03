@@ -49,7 +49,6 @@
   });
 
   function bidComplete(call) {
-    console.log("in bidComplete", call);
     isBidding = false;
     currentBid = {
       ...currentBid,

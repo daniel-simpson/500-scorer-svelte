@@ -109,7 +109,7 @@
   <div class="misere">
     {#each $miseres as misere}
       <button on:click={() => callMisere(misere.points)}>
-        {misere.Name} Misere
+        {misere.name} Misere
       </button>
     {/each}
   </div>
