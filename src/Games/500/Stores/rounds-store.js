@@ -7,8 +7,6 @@ export default {
 
   addRound: ({ index, dealer, call, blackTricks, redTricks }) => {
     roundsStore.update(rounds => {
-      console.log("In Add Round", index, dealer, call, blackTricks, redTricks);
-
       const previousRound = rounds[rounds.length - 1];
       let blackScore = previousRound ? previousRound.blackScore : 0;
       let redScore = previousRound ? previousRound.redScore : 0;

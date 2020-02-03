@@ -1,6 +1,8 @@
 <script>
   import { createEventDispatcher, onDestroy } from "svelte";
-  import playersStore from "./player-store.js";
+  import playersStore from "./Stores/player-store.js";
+
+  export let requiredPlayers = [];
 
   const dispatch = createEventDispatcher();
 
@@ -11,8 +13,14 @@
 
   let unsubscribe = playersStore.subscribe(items => {
     players = items;
-    canSubmit = players.length % 2 === 0;
+
+    if (requiredPlayers.length > 0) {
+      canSubmit = requiredPlayers.includes(players.length);
+    } else {
+      canSubmit = players.length > 1;
+    }
   });
+
   onDestroy(() => {
     if (unsubscribe) {
       unsubscribe();

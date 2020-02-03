@@ -1,25 +1,14 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";
-  import players from "../Player/player-store";
-  import { blackTeamStore } from "../Player/team-store";
 
-  import Suit from "./Suit.svelte";
+  import players from "../../../Player/Stores/player-store";
+  import { blackTeamStore } from "../Stores/team-store";
+  import { amount, suits, miseres } from "../Stores/available-calls-store";
+
+  import Suit from "../../../UI/DisplaySuit.svelte";
 
   const dispatch = createEventDispatcher();
-
-  const allowedNumbers = [6, 7, 8, 9, 10];
-  const allowedSuits = [
-    { name: "Spades", symbol: "♠", color: "black", points: 40 },
-    { name: "Clubs", symbol: "♣", color: "black", points: 60 },
-    { name: "Diamonds", symbol: "♦", color: "red", points: 80 },
-    { name: "Hearts", symbol: "❤", color: "red", points: 100 },
-    { name: "No Trumps", symbol: "🚫", points: 120 }
-  ];
-  const allowedMiseres = [
-    { name: "Closed", symbol: "CM", points: 250 },
-    { name: "Open", symbol: "OM", points: 500 }
-  ];
 
   let selectedPlayer;
   $: selectedTeam =
@@ -48,7 +37,6 @@
 
 <style>
   table,
-  th,
   tr,
   td {
     border: 1px solid black;
@@ -73,7 +61,7 @@
   }
 
   .misere > button {
-    width: 48%;
+    padding: 2rem;
   }
 </style>
 
@@ -91,19 +79,19 @@
     <thead>
       <tr>
         <td />
-        {#each allowedNumbers as amount}
+        {#each $amount as amount}
           <td>{amount}</td>
         {/each}
       </tr>
     </thead>
 
     <tbody>
-      {#each allowedSuits as suit}
+      {#each $suits as suit}
         <tr>
           <td>
             <Suit {suit} showName={true} />
           </td>
-          {#each allowedNumbers as amount}
+          {#each $amount as amount}
             <td>
               <div class="bid-value">
                 <button on:click={() => onBidComplete(amount, suit)}>
@@ -119,7 +107,10 @@
   </table>
 
   <div class="misere">
-    <button on:click={() => callMisere(250)}>Closed Misere</button>
-    <button on:click={() => callMisere(500)}>Open Misere</button>
+    {#each $miseres as misere}
+      <button on:click={() => callMisere(misere.points)}>
+        {misere.name} Misere
+      </button>
+    {/each}
   </div>
 </section>

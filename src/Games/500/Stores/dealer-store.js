@@ -1,6 +1,6 @@
 import { derived } from "svelte/store";
-import players from "./player-store";
-import rounds from "../Score/rounds-store";
+import players from "../../../Player/Stores/player-store";
+import rounds from "./rounds-store";
 
 const firstDealerIndex = derived(
   players,

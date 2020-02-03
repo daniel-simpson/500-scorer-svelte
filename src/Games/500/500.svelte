@@ -1,13 +1,14 @@
 <script>
   import { createEventDispatcher, onDestroy } from "svelte";
 
-  import roundsStore from "./rounds-store";
-  import players from "../Player/player-store";
-  import { blackTeamStore, redTeamStore } from "../Player/team-store";
-  import dealer from "../Player/dealer-store";
+  import players from "../../Player/Stores/player-store";
 
-  import Bid from "./Bid.svelte";
-  import Call from "./Call.svelte";
+  import dealer from "./Stores/dealer-store";
+  import roundsStore from "./Stores/rounds-store";
+  import { blackTeamStore, redTeamStore } from "./Stores/team-store";
+
+  import Bid from "./UI/Bid.svelte";
+  import Call from "./UI/Call.svelte";
 
   $: numberOfPlayersPerTeam = $players.length / 2;
   let dispatch = createEventDispatcher();
@@ -48,7 +49,6 @@
   });
 
   function bidComplete(call) {
-    console.log("in bidComplete", call);
     isBidding = false;
     currentBid = {
       ...currentBid,
@@ -92,8 +92,9 @@
   }
 </style>
 
-<section>
+<h1>Five Hundred</h1>
 
+<section>
   <table>
     <thead>
       <tr>

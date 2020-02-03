@@ -1,6 +1,7 @@
 import { writable } from "svelte/store";
+import persistentStore from "../../Util/PersistentStore";
 
-const playerStore = writable([]);
+const playerStore = persistentStore("players", []);
 
 export default {
   subscribe: playerStore.subscribe,
