@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher, onDestroy } from "svelte";
-  import playersStore from "./player-store.js";
+  import playersStore from "./Stores/player-store.js";
 
   const dispatch = createEventDispatcher();
 

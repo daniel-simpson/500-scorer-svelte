@@ -1,12 +1,27 @@
 <script>
-  import dealer from "./Player/dealer-store";
-
   import PlayerEntry from "./Player/Entry.svelte";
-  import PlayerTable from "./Player/TableView.svelte";
-  import Scorecard from "./Score/Scorecard.svelte";
+  import fivehundred from "./Games/500/500.svelte";
 
+  const gameList = [
+    {
+      name: "500",
+      needsEvenPlayers: true,
+      component: fivehundred
+    },
+    {
+      name: "Bugger Me!",
+      needsEvenPlayers: false,
+      component: null
+    }
+  ];
+
+  let game = {};
   let status = "new-game";
-  let winningTeam = "";
+  let winner = "";
+
+  function gameSelected(selectedGame) {
+    game = selectedGame;
+  }
 
   function entryComplete() {
     status = "gameplay";
@@ -14,7 +29,7 @@
 
   function gameComplete(event) {
     status = "complete";
-    winningTeam = event.detail;
+    winner = event.detail;
   }
 </script>
 
@@ -41,15 +56,30 @@
 </style>
 
 <main>
-  <h1>500 scorecard</h1>
+  <h1>Card games, baby!</h1>
 
-  {#if status === 'new-game'}
-    <PlayerEntry on:entry-complete={entryComplete} />
-  {:else if status === 'gameplay' || status === 'complete'}
-    <Scorecard on:game-finish={gameComplete} />
-  {/if}
+  <!--Choose game-->
+  {#if !game || !game.name}
+    <p>Select a game:</p>
+    <ul>
+      {#each gameList as gameItem}
+        <li on:click={gameSelected(gameItem)}>{gameList.name}</li>
+      {/each}
+    </ul>
+  {:else}
+    <small on:click{()>{(game = {})}>Select a different game</small>
+    <h2>{game.name}</h2>
 
-  {#if status === 'complete'}
-    <p>Congratulations team {winningTeam}!</p>
+    {#if status === 'new-game'}
+      <!--Add players-->
+      <PlayerEntry
+        needsEvenPlayers={game.needsEvenPlayers}
+        on:entry-complete={entryComplete} />
+    {:else if status === 'gameplay'}
+      <!-- Gameplay-->
+      <svelte:component this={fivehundred} on:game-finish={gameComplete} />
+    {:else if status === 'complete'}
+      <p>Congratulations team {winner}!</p>
+    {/if}
   {/if}
 </main>

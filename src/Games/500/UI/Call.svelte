@@ -1,13 +1,11 @@
 <script>
-  import Suit from "./Suit.svelte";
+  import Suit from "../../../UI/DisplaySuit.svelte";
 
   export let amount;
   export let suit = {};
   export let player;
   export let team;
   export let score;
-
-  console.log(suit);
 </script>
 
 <style>
