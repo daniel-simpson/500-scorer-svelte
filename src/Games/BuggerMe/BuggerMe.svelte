@@ -3,6 +3,7 @@
 
   import gameStore from "./Stores/game-store";
 
+  import GameInfo from "./UI/GameInfo.svelte";
   import Entry from "./UI/Entry.svelte";
   import PickNumberOfCards from "./UI/PickNumberOfCards.svelte";
   import Scorecard from "./UI/Scorecard.svelte";
@@ -19,10 +20,7 @@
   });
 
   let status = "setup";
-  $: console.log("status", status);
-
-  $: console.log("currentRoundIndex", currentRoundIndex);
-  $: console.log("rounds", rounds);
+  let gameInfo = undefined;
 
   onDestroy(() => {
     if (unsubscribeGame) {
@@ -33,6 +31,7 @@
   let maximumCards = 0;
   function onSetupComplete(event) {
     gameStore.init(event.detail);
+    gameInfo = event.detail;
     status = "bidding";
   }
 
@@ -52,6 +51,7 @@
 <h1>Bugger Me!</h1>
 
 {#if status !== 'setup'}
+  <GameInfo {...gameInfo} />
   <Scorecard {rounds} />
 {/if}
 
