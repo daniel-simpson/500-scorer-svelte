@@ -82,6 +82,7 @@
       <small
         on:click={() => {
           game = undefined;
+          status = 'new-game';
         }}>
         Select a different game
       </small>
