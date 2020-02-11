@@ -7,7 +7,11 @@ export default (key, init) => {
   if (isBrowser) {
     let storedValue = localStorage.getItem(key);
 
-    initialValue = !!storedValue ? JSON.parse(storedValue) : init;
+    try {
+      initialValue = storedValue !== undefined ? JSON.parse(storedValue) : init;
+    } catch {
+      initialValue = init;
+    }
   }
 
   var store = writable(initialValue);
