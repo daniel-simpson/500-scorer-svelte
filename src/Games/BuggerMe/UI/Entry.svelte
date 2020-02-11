@@ -25,7 +25,9 @@
   }
 
   function entryComplete() {
-    dispatch("entryComplete", scores);
+    if (!isNotValid) {
+      dispatch("entryComplete", scores);
+    }
   }
 </script>
 
@@ -36,7 +38,7 @@
   }
 </style>
 
-<section>
+<form on:submit|preventDefault={entryComplete}>
   <ul>
     {#each players as player, i}
       <li>
@@ -45,5 +47,5 @@
       </li>
     {/each}
   </ul>
-  <button disabled={isNotValid} on:click={entryComplete}>Submit</button>
-</section>
+  <button type="submit" disabled={isNotValid}>Submit</button>
+</form>
