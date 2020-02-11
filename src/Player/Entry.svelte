@@ -27,12 +27,6 @@
     }
   });
 
-  function addPlayerEnter(event) {
-    if (event.keyCode == 13) {
-      addPlayer();
-    }
-  }
-
   function addPlayer() {
     if (playerName.length == 0) {
       error = "Please enter a name";
@@ -73,11 +67,11 @@
   <h1>Players</h1>
   <p>Please enter player details to continue...</p>
 
-  <div>
-    <input type="text" bind:value={playerName} on:keyup={addPlayerEnter} />
-    <button on:click={addPlayer}>Add Player</button>
+  <form on:submit|preventDefault={addPlayer}>
+    <input type="text" bind:value={playerName} />
+    <button type="submit">Add Player</button>
     <p class="error">{error}</p>
-  </div>
+  </form>
 
   {#if players && players.length > 0}
     <ul>
