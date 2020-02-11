@@ -5,16 +5,16 @@
   import canasta from "./Games/Canasta/Canasta.svelte";
 
   let gameList = [
-    {
-      name: "500",
-      requiredPlayers: [2, 4, 6],
-      component: fivehundred
-    }
     // {
-    //   name: "Bugger Me!",
-    //   requiredPlayers: [],
-    //   component: buggerme
-    // },
+    //   name: "500",
+    //   requiredPlayers: [2, 4, 6],
+    //   component: fivehundred
+    // }
+    {
+      name: "Bugger Me!",
+      requiredPlayers: [],
+      component: buggerme
+    }
     // {
     //   name: "Canasta",
     //   requiredPlayers: [2, 4],
@@ -23,7 +23,7 @@
   ];
 
   let game = gameList.length === 1 ? gameList[0] : undefined;
-  let status = "new-game";
+  let status = "gameplay"; //"new-game";
   let winner = "";
 
   $: title =
@@ -86,7 +86,6 @@
         Select a different game
       </small>
     {/if}
-    <h2>{game.name}</h2>
 
     {#if status === 'new-game'}
       <!--Add players-->
@@ -95,7 +94,7 @@
         on:entry-complete={entryComplete} />
     {:else if status === 'gameplay'}
       <!-- Gameplay-->
-      <svelte:component this={fivehundred} on:game-finish={gameComplete} />
+      <svelte:component this={game.component} on:game-finish={gameComplete} />
     {:else if status === 'complete'}
       <p>Congratulations team {winner}!</p>
     {/if}
