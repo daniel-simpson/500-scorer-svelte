@@ -18,9 +18,9 @@
     }
   });
 
-  $: isValid = isValidTest(scores);
+  $: isNotValid = isNotValidTest(scores);
 
-  function isValidTest(scores) {
+  function isNotValidTest(scores) {
     return scores.includes(undefined) || scores.includes("");
   }
 
@@ -45,5 +45,5 @@
       </li>
     {/each}
   </ul>
-  <button disabled={isValid} on:click={entryComplete}>Submit</button>
+  <button disabled={isNotValid} on:click={entryComplete}>Submit</button>
 </section>
