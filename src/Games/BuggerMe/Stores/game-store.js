@@ -104,11 +104,26 @@ export default {
         };
       });
 
-      return {
-        currentRoundIndex: currentRoundIndex,
-        //TODO: splice correct element out and back in below
-        rounds: [...game.rounds, currentRound, ...game.rounds]
-      };
+      if (currentRoundIndex === 0) {
+        return {
+          currentRoundIndex: currentRoundIndex,
+          rounds: [currentRound, ...game.rounds.slice(1)]
+        };
+      } else if (currentRoundIndex === rounds.length) {
+        return {
+          currentRoundIndex: currentRoundIndex,
+          rounds: [...game.rounds.slice(0, currentRoundIndex - 1), currentRound]
+        };
+      } else {
+        return {
+          currentRoundIndex: currentRoundIndex,
+          rounds: [
+            ...game.rounds.slice(0, currentRoundIndex - 1),
+            currentRound,
+            ...game.rounds.slice(currentRoundIndex + 1)
+          ]
+        };
+      }
     });
   },
 
