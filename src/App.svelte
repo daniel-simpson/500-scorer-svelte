@@ -23,7 +23,7 @@
   ];
 
   let game = gameList.length === 1 ? gameList[0] : undefined;
-  let status = "gameplay"; //"new-game";
+  let status = "new-game";
   let winner = "";
 
   $: title =
