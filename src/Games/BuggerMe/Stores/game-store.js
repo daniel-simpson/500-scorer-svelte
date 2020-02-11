@@ -93,7 +93,6 @@ export default {
 
   addEstimate: estimates => {
     gameStore.update(({ currentRoundIndex, rounds }) => {
-      // Create new rounds, add estimates
       let currentRound = rounds[currentRoundIndex];
 
       currentRound.playerScores = estimates.map(e => {
@@ -104,46 +103,52 @@ export default {
         };
       });
 
-      if (currentRoundIndex === 0) {
-        return {
-          currentRoundIndex: currentRoundIndex,
-          rounds: [currentRound, ...game.rounds.slice(1)]
-        };
-      } else if (currentRoundIndex === rounds.length) {
-        return {
-          currentRoundIndex: currentRoundIndex,
-          rounds: [...game.rounds.slice(0, currentRoundIndex - 1), currentRound]
-        };
-      } else {
-        return {
-          currentRoundIndex: currentRoundIndex,
-          rounds: [
-            ...game.rounds.slice(0, currentRoundIndex - 1),
-            currentRound,
-            ...game.rounds.slice(currentRoundIndex + 1)
-          ]
-        };
-      }
+      let newRounds = [...rounds];
+      newRounds[currentRoundIndex] = currentRound;
+
+      return {
+        currentRoundIndex,
+        rounds: newRounds
+      };
     });
   },
 
   addActual: actuals => {
-    //TODO: fix this
-    gameStore.update(game => {
-      var rounds = game.rounds;
-      var currentRound = rounds.pop();
+    gameStore.update(({ currentRoundIndex, rounds }) => {
+      const previousRound =
+        currentRoundIndex > 0 ? rounds[currentRoundIndex - 1] : undefined;
+      let currentRound = rounds[currentRoundIndex];
 
-      let newDirection = game.direction;
-      if (game.rounds.length > 0 && currentRound.numCards === 1) {
-        newDirection = game.direction * -1;
+      if (actuals.length != currentRound.playerScores.length) {
+        console.error(
+          "Unexpected actuals length:",
+          actuals.length,
+          currentRound.playerScores.length
+        );
       }
 
-      //TODO: Add actuals and compute scores
+      currentRound.playerScores = currentRound.playerScores.map((x, i) => {
+        const previousRoundScore = previousRound
+          ? previousRound.playerScores[i]
+          : 0;
+        const expected = x.expected;
+        const actual = actuals[i];
+
+        const roundScore = 5 * Math.abs(expected - actual);
+
+        return {
+          expected: x.expected,
+          actual: actual,
+          score: previousRoundScore + roundScore
+        };
+      });
+
+      let newRounds = [...rounds];
+      newRounds[currentRoundIndex] = currentRound;
 
       return {
-        ...game,
-        direction: newDirection,
-        rounds: [...rounds, currentRound]
+        currentRoundIndex: currentRoundIndex + 1,
+        rounds: newRounds
       };
     });
   }

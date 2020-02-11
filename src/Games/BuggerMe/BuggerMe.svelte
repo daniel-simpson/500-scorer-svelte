@@ -3,10 +3,11 @@
 
   import gameStore from "./Stores/game-store";
 
-  import GameInfo from "./UI/GameInfo.svelte";
   import Entry from "./UI/Entry.svelte";
   import PickNumberOfCards from "./UI/PickNumberOfCards.svelte";
   import Scorecard from "./UI/Scorecard.svelte";
+
+  let dispatch = createEventDispatcher();
 
   let rounds = [];
   let currentRoundIndex = 0;
@@ -17,6 +18,14 @@
 
     rounds = gameData.rounds;
     currentRoundIndex = gameData.currentRoundIndex;
+
+    if (currentRoundIndex < rounds.length) {
+      return;
+    }
+
+    const lastRound = rounds[rounds.length];
+
+    dispatch("game-finish");
   });
 
   let status = "setup";
@@ -37,7 +46,7 @@
 
   function bidComplete(event) {
     const estimates = event.detail;
-    gameStore.addEstimate();
+    gameStore.addEstimate(estimates);
     status = "scoring";
   }
 
@@ -51,7 +60,6 @@
 <h1>Bugger Me!</h1>
 
 {#if status !== 'setup'}
-  <GameInfo {...gameInfo} />
   <Scorecard {rounds} />
 {/if}
 
