@@ -34,11 +34,11 @@
     if (latestRound.blackScore >= 500 || latestRound.redScore <= -500) {
       currentBid = null;
       isBidding = false;
-      dispatch("game-finish", "black");
+      dispatch("game-finish", `team black - ${$blackTeamStore.join(", ")}!`);
     } else if (latestRound.redScore >= 500 || latestRound.blackScore <= -500) {
       currentBid = null;
       isBidding = false;
-      dispatch("game-finish", "red");
+      dispatch("game-finish", `team red - ${$redTeamStore.join(", ")}!`);
     }
   });
 
