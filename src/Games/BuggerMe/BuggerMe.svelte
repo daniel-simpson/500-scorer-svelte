@@ -1,7 +1,9 @@
 <script>
   import { createEventDispatcher, onDestroy } from "svelte";
+  import minBy from "lodash.minby";
 
   import gameStore from "./Stores/game-store";
+  import players from "../../Player/Stores/player-store";
 
   import Entry from "./UI/Entry.svelte";
   import PickNumberOfCards from "./UI/PickNumberOfCards.svelte";
@@ -19,13 +21,25 @@
     rounds = gameData.rounds;
     currentRoundIndex = gameData.currentRoundIndex;
 
-    if (currentRoundIndex < rounds.length) {
-      return;
+    if (currentRoundIndex >= rounds.length) {
+      // Game is over, calculate the winner
+
+      const lastRound = rounds[rounds.length - 1];
+      const lowestScore = minBy(lastRound.playerScores, x => x.score).score;
+      const winningPlayerIndexes = lastRound.playerScores.reduce(
+        (acc, x, i) => {
+          if (x.score === lowestScore) {
+            acc.push(i);
+          }
+          return acc;
+        },
+        []
+      );
+
+      const winningPlayers = winningPlayerIndexes.map(i => $players[i]);
+
+      dispatch("game-finish", winningPlayers.join(", "));
     }
-
-    const lastRound = rounds[rounds.length];
-
-    dispatch("game-finish");
   });
 
   let status = "setup";

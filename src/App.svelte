@@ -33,6 +33,11 @@
     game = selectedGame;
   }
 
+  function resetSelection() {
+    game = undefined;
+    status = "new-game";
+  }
+
   function entryComplete() {
     status = "gameplay";
   }
@@ -79,13 +84,7 @@
     {/each}
   {:else}
     {#if gameList.length !== 1}
-      <small
-        on:click={() => {
-          game = undefined;
-          status = 'new-game';
-        }}>
-        Select a different game
-      </small>
+      <small on:click={resetSelection}>Select a different game</small>
     {/if}
 
     {#if status === 'new-game'}
@@ -97,7 +96,8 @@
       <!-- Gameplay-->
       <svelte:component this={game.component} on:game-finish={gameComplete} />
     {:else if status === 'complete'}
-      <p>Congratulations team {winner}!</p>
+      <p>Congratulations {winner}!</p>
+      <button on:click={resetSelection}>Play another game...</button>
     {/if}
   {/if}
 </main>

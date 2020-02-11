@@ -129,15 +129,15 @@ export default {
 
       currentRound.playerScores = currentRound.playerScores.map((x, i) => {
         const previousRoundScore = previousRound
-          ? previousRound.playerScores[i]
+          ? previousRound.playerScores[i].score
           : 0;
-        const expected = x.expected;
+        const estimate = x.estimate;
         const actual = actuals[i];
 
-        const roundScore = 5 * Math.abs(expected - actual);
+        const roundScore = 5 * Math.abs(estimate - actual);
 
         return {
-          expected: x.expected,
+          estimate: x.estimate,
           actual: actual,
           score: previousRoundScore + roundScore
         };
