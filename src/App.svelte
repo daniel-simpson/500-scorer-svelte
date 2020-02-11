@@ -5,11 +5,11 @@
   import canasta from "./Games/Canasta/Canasta.svelte";
 
   let gameList = [
-    // {
-    //   name: "500",
-    //   requiredPlayers: [2, 4, 6],
-    //   component: fivehundred
-    // }
+    {
+      name: "500",
+      requiredPlayers: [2, 4, 6],
+      component: fivehundred
+    },
     {
       name: "Bugger Me!",
       requiredPlayers: [],
