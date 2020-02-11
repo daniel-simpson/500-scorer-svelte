@@ -47,6 +47,12 @@
   function removePlayer(player) {
     playersStore.removePlayer(player);
   }
+
+  function entryComplete() {
+    if (canSubmit) {
+      dispatch("entry-complete");
+    }
+  }
 </script>
 
 <style>
@@ -81,12 +87,6 @@
     </ul>
     <small>Note: Click a player to remove them</small>
 
-    <button
-      disabled={!canSubmit}
-      on:click={() => {
-        dispatch('entry-complete');
-      }}>
-      Let's Play!
-    </button>
+    <button disabled={!canSubmit} on:click={entryComplete}>Let's Play!</button>
   {/if}
 </section>
