@@ -30,6 +30,13 @@
 </script>
 
 <style>
+  header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  }
+
   main {
     text-align: center;
     padding: 1em;
@@ -55,9 +62,11 @@
   <title>{title}</title>
 </svelte:head>
 
-<main>
+<header>
   <h1>{title}</h1>
 
+</header>
+<main>
   {#if game === undefined}
     <p>Select a game:</p>
     {#each $gameList as gameItem}
