@@ -1,6 +1,7 @@
 <script>
   import gameList from "./Games/gamelist-store";
 
+  import Auth from "./Auth/Index.svelte";
   import PlayerEntry from "./Player/Entry.svelte";
 
   let game = $gameList.length === 1 ? $gameList[0] : undefined;
@@ -64,7 +65,7 @@
 
 <header>
   <h1>{title}</h1>
-
+  <Auth />
 </header>
 <main>
   {#if game === undefined}
