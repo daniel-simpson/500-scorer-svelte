@@ -6,10 +6,11 @@
 
   import GameInfo from "./GameInfo.svelte";
 
-  let maxCards = getLargestNumberOfCardsDivisbleByPlayers($players);
+  let maxCards = getLargestNumberOfCardsDivisbleByPlayers($players.length);
   let numberOfCardsInPlay = maxCards;
 
   let dispatch = createEventDispatcher();
+
   function onSelectionComplete() {
     dispatch("setupComplete", {
       players: $players,

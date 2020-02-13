@@ -11,78 +11,73 @@
 
   let dispatch = createEventDispatcher();
 
-  let rounds = [];
-  let currentRoundIndex = 0;
-  let unsubscribeGame = gameStore.subscribe(gameData => {
+  let status = "setup";
+
+  function onSetupComplete(event) {
+    gameStore.init(event.detail);
+    status = "bidding";
+  }
+
+  function onBidComplete(event) {
+    const estimates = event.detail;
+    gameStore.addEstimate(estimates);
+    status = "scoring";
+  }
+
+  function onScoreComplete(event) {
+    const actuals = event.detail;
+    gameStore.addActual(actuals);
+    status = "bidding";
+  }
+
+  function onRoundComplete(gameData) {
     if (!gameData) {
       return;
     }
 
-    rounds = gameData.rounds;
-    currentRoundIndex = gameData.currentRoundIndex;
+    let { rounds, currentRoundIndex } = gameData;
 
-    if (currentRoundIndex >= rounds.length) {
-      // Game is over, calculate the winner
-
-      const lastRound = rounds[rounds.length - 1];
-      const lowestScore = minBy(lastRound.playerScores, x => x.score).score;
-      const winningPlayerIndexes = lastRound.playerScores.reduce(
-        (acc, x, i) => {
-          if (x.score === lowestScore) {
-            acc.push(i);
-          }
-          return acc;
-        },
-        []
-      );
-
-      const winningPlayers = winningPlayerIndexes.map(i => $players[i]);
-
-      dispatch("game-finish", winningPlayers.join(", "));
+    if (currentRoundIndex < rounds.length) {
+      // Game is still in play
+      return;
     }
-  });
 
-  let status = "setup";
-  let gameInfo = undefined;
+    // Game is over, calculate the winner
+    const lastRound = rounds[rounds.length - 1];
+    const lowestScore = minBy(lastRound.playerScores, x => x.score).score;
+    const winningPlayerIndexes = lastRound.playerScores.reduce((acc, x, i) => {
+      if (x.score === lowestScore) {
+        acc.push(i);
+      }
+      return acc;
+    }, []);
+
+    const winningPlayers = winningPlayerIndexes.map(i => $players[i]);
+
+    dispatch("game-finish", winningPlayers.join(", "));
+  }
+
+  let unsubscribeGame = gameStore.subscribe(onRoundComplete);
 
   onDestroy(() => {
     if (unsubscribeGame) {
       unsubscribeGame();
     }
   });
-
-  let maximumCards = 0;
-  function onSetupComplete(event) {
-    gameStore.init(event.detail);
-    gameInfo = event.detail;
-    status = "bidding";
-  }
-
-  function bidComplete(event) {
-    const estimates = event.detail;
-    gameStore.addEstimate(estimates);
-    status = "scoring";
-  }
-
-  function scoreComplete(event) {
-    const actuals = event.detail;
-    gameStore.addActual(actuals);
-    status = "bidding";
-  }
 </script>
 
 <h1>Bugger Me!</h1>
 
 {#if status !== 'setup'}
-  <Scorecard {rounds} />
+  <Scorecard />
 {/if}
 
 {#if status === 'setup'}
   <PickNumberOfCards on:setupComplete={onSetupComplete} />
 {:else if status === 'bidding'}
   <h3>Wants</h3>
-  <Entry on:entryComplete={bidComplete} />
+  <Entry on:entryComplete={onBidComplete} />
 {:else if status === 'scoring'}
   <h3>Gets</h3>
-  <Entry on:entryComplete={scoreComplete} />
+  <Entry on:entryComplete={onScoreComplete} />
 {/if}

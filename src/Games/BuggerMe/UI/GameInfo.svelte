@@ -8,7 +8,6 @@
   } from "../util";
 
   export let numberOfCardsInPlay;
-  export let displayTotalCardNumber = false;
 
   $: maxNumberOfCards = getMaxNumberOfCards(
     numberOfCardsInPlay,
@@ -19,9 +18,6 @@
 </script>
 
 <blockquote>
-  {#if displayTotalCardNumber}
-    <p>Selected {numberOfCardsInPlay} cards</p>
-  {/if}
   <p>There are {$players.length} players in this game</p>
   <p>Biggest round has {maxNumberOfCards} cards each</p>
   <p>Which means {numberOfRounds} rounds</p>

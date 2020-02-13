@@ -1,6 +1,6 @@
 <script>
   import players from "../../../Player/Stores/player-store";
-  export let rounds = [];
+  import game from "../Stores/game-store";
 </script>
 
 <style>
@@ -47,7 +47,7 @@
   </thead>
 
   <tbody>
-    {#each rounds as round}
+    {#each $game.rounds as round}
       <tr>
         <td title={round.dealer}>{round.dealer[0]}</td>
         <td>{round.numCards}</td>

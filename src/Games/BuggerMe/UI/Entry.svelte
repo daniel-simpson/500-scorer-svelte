@@ -18,14 +18,14 @@
     }
   });
 
-  $: isNotValid = isNotValidTest(scores);
+  $: isValid = validateInputs(scores);
 
-  function isNotValidTest(scores) {
-    return scores.includes(undefined) || scores.includes("");
+  function validateInputs(scores) {
+    return !scores.includes(undefined) && !scores.includes("");
   }
 
   function entryComplete() {
-    if (!isNotValid) {
+    if (isValid) {
       dispatch("entryComplete", scores);
     }
   }
@@ -47,5 +47,5 @@
       </li>
     {/each}
   </ul>
-  <button type="submit" disabled={isNotValid}>Submit</button>
+  <button type="submit" disabled={!isValid}>Submit</button>
 </form>

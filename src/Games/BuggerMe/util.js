@@ -1,12 +1,10 @@
-export const getLargestNumberOfCardsDivisbleByPlayers = players => {
-  const numPlayers = players.length;
-
+export const getLargestNumberOfCardsDivisbleByPlayers = numPlayers => {
   for (let i = 52; i > 0; i--) {
     if (i % numPlayers === 0) {
       return i;
     }
   }
-  return undefined;
+  throw `${numPlayers} is not divisible by any number less than 52... Try a different game or play with less people, dude`;
 };
 
 export const getMaxNumberOfCards = (numCardsInPlay, numPlayers) => {
