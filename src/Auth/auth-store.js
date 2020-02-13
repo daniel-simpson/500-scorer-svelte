@@ -8,7 +8,7 @@ const goTrueInstance = new GoTrue({
 
 const goTrueUser = goTrueInstance.currentUser() || undefined;
 
-export const authUserStore = writable(goTrueUser);
+export const user = writable(goTrueUser);
 
 export function signup(email, password) {
   return goTrueInstance.signup(email, password);
@@ -30,8 +30,8 @@ export function confirm(token) {
 
 export async function signin(email, password) {
   try {
-    await goTrueInstance.login(email, password, true).then(user => {
-      authUserStore.update(() => user);
+    await goTrueInstance.login(email, password, true).then(u => {
+      user.update(() => u);
     });
   } catch (e) {
     alert(e.message);
@@ -43,7 +43,7 @@ export function signout() {
   goTrueUser
     .logout()
     .then(() => {
-      authUserStore.update(user => undefined);
+      user.update(u => undefined);
     })
     .catch(e => {
       alert(e.message);
@@ -56,9 +56,8 @@ export async function updateUserSecuritySettings(email, password) {
       email: email,
       password: password
     });
-    console.log(updatedUser);
 
-    authUserStore.update(() => updatedUser);
+    user.update(() => updatedUser);
   } catch (e) {
     alert(e.message);
   }
@@ -69,9 +68,8 @@ export async function updateUserCustomSettings(fullname) {
     const updatedUser = await goTrueUser.update({
       data: { fullname: fullname }
     });
-    console.log(updatedUser);
 
-    authUserStore.update(() => updatedUser);
+    user.update(() => updatedUser);
   } catch (e) {
     alert(e.message);
   }
@@ -90,7 +88,7 @@ export async function recover(token) {
       JSON.stringify({ response })
     );
     console.log(`recovered account: ${existingUser}`);
-    authUserStore.update(() => existingUser);
+    user.update(() => existingUser);
     window.location.assign("/settings");
   } catch (e) {
     console.log("something wrong with recovery");
