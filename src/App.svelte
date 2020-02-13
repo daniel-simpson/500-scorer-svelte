@@ -1,28 +1,9 @@
 <script>
+  import gameList from "./Games/gamelist-store";
+
   import PlayerEntry from "./Player/Entry.svelte";
-  import fivehundred from "./Games/500/500.svelte";
-  import buggerme from "./Games/BuggerMe/BuggerMe.svelte";
-  import canasta from "./Games/Canasta/Canasta.svelte";
 
-  let gameList = [
-    {
-      name: "500",
-      requiredPlayers: [2, 4, 6],
-      component: fivehundred
-    },
-    {
-      name: "Bugger Me!",
-      requiredPlayers: [],
-      component: buggerme
-    }
-    // {
-    //   name: "Canasta",
-    //   requiredPlayers: [2, 4],
-    //   component: canasta
-    // }
-  ];
-
-  let game = gameList.length === 1 ? gameList[0] : undefined;
+  let game = $gameList.length === 1 ? $gameList[0] : undefined;
   let status = "new-game";
   let winner = "";
 
@@ -79,11 +60,11 @@
 
   {#if game === undefined}
     <p>Select a game:</p>
-    {#each gameList as gameItem}
+    {#each $gameList as gameItem}
       <button on:click={() => gameSelected(gameItem)}>{gameItem.name}</button>
     {/each}
   {:else}
-    {#if gameList.length !== 1}
+    {#if $gameList.length !== 1}
       <small on:click={resetSelection}>Select a different game</small>
     {/if}
 
