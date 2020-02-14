@@ -1,5 +1,5 @@
 <script>
-  import { signin } from "../auth-store";
+  import { signup } from "../auth-store";
 
   import Modal from "../../UI/Modal.svelte";
 
@@ -26,7 +26,7 @@
     if (!isValid) {
       return;
     }
-    signin(email, password);
+    signup(email, password);
   }
 </script>
 
