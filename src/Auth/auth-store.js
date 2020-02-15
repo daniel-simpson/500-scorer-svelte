@@ -15,7 +15,7 @@ export function signup(email, password) {
 }
 
 export function confirm(token) {
-  goTrueInstance
+  return goTrueInstance
     .confirm(token)
     .then(function(response) {
       alert(
@@ -29,14 +29,9 @@ export function confirm(token) {
 }
 
 export async function signin(email, password) {
-  try {
-    await goTrueInstance.login(email, password, true).then(u => {
-      user.update(() => u);
-    });
-  } catch (e) {
-    alert(e.message);
-    throw e.message;
-  }
+  return goTrueInstance.login(email, password, true).then(u => {
+    user.update(() => u);
+  });
 }
 
 export function signout() {
