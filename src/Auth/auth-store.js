@@ -15,17 +15,7 @@ export function signup(email, password) {
 }
 
 export function confirm(token) {
-  return goTrueInstance
-    .confirm(token)
-    .then(function(response) {
-      alert(
-        "Account confirmed! Welcome to the party! You can now login with your details",
-        JSON.stringify({ response })
-      );
-    })
-    .catch(function(e) {
-      alert(e.message);
-    });
+  return goTrueInstance.confirm(token);
 }
 
 export async function signin(email, password) {
@@ -35,14 +25,9 @@ export async function signin(email, password) {
 }
 
 export function signout() {
-  goTrueUser
-    .logout()
-    .then(() => {
-      user.update(u => undefined);
-    })
-    .catch(e => {
-      alert(e.message);
-    });
+  return goTrueUser.logout().then(() => {
+    user.update(u => undefined);
+  });
 }
 
 export async function updateUserSecuritySettings(email, password) {
@@ -52,7 +37,7 @@ export async function updateUserSecuritySettings(email, password) {
       password: password
     });
 
-    user.update(() => updatedUser);
+    return user.update(() => updatedUser);
   } catch (e) {
     alert(e.message);
   }
