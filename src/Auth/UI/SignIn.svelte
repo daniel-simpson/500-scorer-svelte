@@ -9,7 +9,7 @@
   let show = false;
   let email;
   let password;
-  let signInPromise;
+  let promise;
 
   $: isValid = validate(email, password);
 
@@ -29,8 +29,8 @@
     if (!isValid) {
       return;
     }
-    signInPromise = signin(email, password);
-    signInPromise.timeout(2000).then(hideModal);
+    promise = signin(email, password);
+    promise.timeout(2000).then(hideModal);
   }
 </script>
 
@@ -49,8 +49,8 @@
       <input placeholder="Email" type="email" bind:value={email} />
       <input placeholder="Password" type="password" bind:value={password} />
 
-      {#if signInPromise}
-        {#await signInPromise}
+      {#if promise}
+        {#await promise}
           <p>Signing you in...</p>
         {:then}
           <p>Success!</p>

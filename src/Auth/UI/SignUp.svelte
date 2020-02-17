@@ -9,7 +9,7 @@
   let email;
   let password;
   let confirmPassword;
-  let signupPromise;
+  let promise;
 
   $: isValid = validate(email, password, confirmPassword);
 
@@ -30,8 +30,8 @@
       return;
     }
 
-    signupPromise = signup(email, password);
-    signupPromise.timeout(2000).then(hideModal);
+    promise = signup(email, password);
+    promise.timeout(2000).then(hideModal);
   }
 </script>
 
@@ -56,8 +56,8 @@
         bind:value={confirmPassword} />
     </form>
 
-    {#if signupPromise}
-      {#await signupPromise}
+    {#if promise}
+      {#await promise}
         <p>Signing you up...</p>
       {:then}
         <p>
