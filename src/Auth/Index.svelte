@@ -26,11 +26,15 @@
     }
 
     confirmationPromise = confirm(token);
-    confirmationPromise.then(() => {
-      setTimeout(() => {
+    confirmationPromise
+      .then(() => {
+        setTimeout(() => {
+          isConfirming = false;
+        }, 2000);
+      })
+      .catch(() => {
         isConfirming = false;
-      }, 2000);
-    });
+      });
   });
 </script>
 
