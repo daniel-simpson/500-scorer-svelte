@@ -2,6 +2,7 @@
   import { signin } from "../auth-store";
   import { isValidEmail } from "../../Util/validation";
 
+  import ForgotPassword from "./ForgotPassword.svelte";
   import Modal from "../../UI/Modal.svelte";
 
   let show = false;
@@ -62,6 +63,9 @@
         {/await}
       {/if}
 
+      <ForgotPassword
+        initialEmail={email}
+        on:forgot-password-requested={hideModal} />
     </form>
   </div>
   <div slot="buttons">

@@ -77,3 +77,9 @@ button:focus {
 .team:nth-child(2n + 1) {
   color: red;
 }
+
+button.link-button {
+  background: transparent;
+  border: none;
+  text-decoration: underline;
+}
