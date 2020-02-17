@@ -10,7 +10,7 @@
   let confirmPassword;
   let signupPromise;
 
-  $: isValid = validate(email, password);
+  $: isValid = validate(email, password, confirmPassword);
 
   function showModal() {
     show = true;
