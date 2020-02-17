@@ -1,40 +1,24 @@
 <script>
   import { onMount } from "svelte";
+  import {
+    hasConfirmationTokenInHash,
+    hasRecoveryTokenInHash
+  } from "../Util/url";
 
   import { user, confirm } from "./auth-store.js";
   import SignUp from "./UI/SignUp.svelte";
   import SignIn from "./UI/SignIn.svelte";
   import SignOut from "./UI/SignOut.svelte";
-  import Modal from "../UI/Modal.svelte";
+  import ConfirmAccount from "./UI/ConfirmAccount.svelte";
+  import RecoverAccount from "./UI/RecoverAccount.svelte";
 
-  let confirmationPromise;
-  let isConfirming = false;
+  let isConfirm = false;
+  let isRecover = false;
 
   onMount(() => {
-    const hash = window.location.hash;
-    if (hash.indexOf("confirmation_token=") === -1) {
-      return;
-    }
-
-    isConfirming = true;
-    const token = hash.substring(hash.indexOf("=") + 1);
-
-    console.log("Token", token);
-    if (!token) {
-      console.error("No token specified in hash...");
-      return;
-    }
-
-    confirmationPromise = confirm(token);
-    confirmationPromise
-      .then(() => {
-        setTimeout(() => {
-          isConfirming = false;
-        }, 2000);
-      })
-      .catch(() => {
-        isConfirming = false;
-      });
+    // Ensure we're on the client side before accessing window.location.hash
+    isConfirm = hasConfirmationTokenInHash();
+    isRecover = hasRecoveryTokenInHash();
   });
 </script>
 
@@ -47,12 +31,10 @@
   {/if}
 </div>
 
-{#if confirmationPromise}
-  <Modal show={isConfirming}>
-    {#await confirmationPromise}
-      <p>Confirming your details...</p>
-    {:then data}
-      <p>Confirmed!</p>
-    {/await}
-  </Modal>
+{#if isConfirm}
+  <ConfirmAccount />
+{/if}
+
+{#if isRecover}
+  <RecoverAccount />
 {/if}
