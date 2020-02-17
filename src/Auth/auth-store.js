@@ -25,7 +25,7 @@ export async function signin(email, password) {
 }
 
 export function signout() {
-  return goTrueUser.logout().then(() => {
+  return goTrueUser.logout().finally(() => {
     user.update(u => undefined);
   });
 }
