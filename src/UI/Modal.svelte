@@ -51,7 +51,6 @@
         </main>
         <footer>
           <slot name="buttons">
-            <hr />
             <button on:click={closeModal}>Close</button>
           </slot>
         </footer>
