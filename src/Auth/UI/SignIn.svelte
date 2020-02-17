@@ -1,5 +1,6 @@
 <script>
   import { signin } from "../auth-store";
+  import { isValidEmail } from "../../Util/validation";
 
   import Modal from "../../UI/Modal.svelte";
 
@@ -19,7 +20,7 @@
   }
 
   function validate(email, password) {
-    return email && password;
+    return isValidEmail(email) && password;
   }
 
   function onSubmit() {
@@ -44,23 +45,24 @@
 
 <Modal {show} on:close={hideModal}>
   <div>
-    <form on:submit|preventDefault={onSubmit}>
+    <form on:submit|preventDefault|once={onSubmit}>
       <input placeholder="Email" type="email" bind:value={email} />
       <input placeholder="Password" type="password" bind:value={password} />
-    </form>
 
-    {#if signInPromise}
-      {#await signInPromise}
-        <p>Signing you in...</p>
-      {:then}
-        <p>Success!</p>
-      {:catch}
-        <p>
-          There was a problem signing you in. Please check your details and try
-          again
-        </p>
-      {/await}
-    {/if}
+      {#if signInPromise}
+        {#await signInPromise}
+          <p>Signing you in...</p>
+        {:then}
+          <p>Success!</p>
+        {:catch}
+          <p>
+            There was a problem signing you in. Please check your details and
+            try again
+          </p>
+        {/await}
+      {/if}
+
+    </form>
   </div>
   <div slot="buttons">
     <button disabled={!isValid} on:click={onSubmit}>Sign in</button>

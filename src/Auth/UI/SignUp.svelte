@@ -1,5 +1,6 @@
 <script>
   import { signup } from "../auth-store";
+  import { isValidEmail } from "../../Util/validation";
 
   import Modal from "../../UI/Modal.svelte";
 
@@ -19,8 +20,8 @@
     show = false;
   }
 
-  function validate(email, password) {
-    return email && password && password === confirmPassword;
+  function validate(email, password, confirmPassword) {
+    return isValidEmail(email) && password && password === confirmPassword;
   }
 
   function onSubmit() {
