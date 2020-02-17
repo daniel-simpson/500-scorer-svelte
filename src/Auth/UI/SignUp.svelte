@@ -1,6 +1,7 @@
 <script>
   import { signup } from "../auth-store";
   import { isValidEmail } from "../../Util/validation";
+  import { timeout } from "../../Util/asyncAwait";
 
   import Modal from "../../UI/Modal.svelte";
 
@@ -28,11 +29,9 @@
     if (!isValid) {
       return;
     }
-    signupPromise = signup(email, password);
 
-    signupPromise.then(() => {
-      setTimeout(hideModal, 2000);
-    });
+    signupPromise = signup(email, password);
+    signupPromise.timeout(2000).then(hideModal);
   }
 </script>
 

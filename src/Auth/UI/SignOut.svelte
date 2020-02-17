@@ -2,4 +2,4 @@
   import { signout } from "../auth-store";
 </script>
 
-<button on:click={signout}>Sign In</button>
+<button on:click={signout}>Sign Out</button>

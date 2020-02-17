@@ -1,6 +1,7 @@
 <script>
   import { signin } from "../auth-store";
   import { isValidEmail } from "../../Util/validation";
+  import { timeout } from "../../Util/asyncAwait";
 
   import ForgotPassword from "./ForgotPassword.svelte";
   import Modal from "../../UI/Modal.svelte";
@@ -29,9 +30,7 @@
       return;
     }
     signInPromise = signin(email, password);
-    signInPromise.then(() => {
-      setTimeout(hideModal, 2000);
-    });
+    signInPromise.timeout(2000).then(hideModal);
   }
 </script>
 
