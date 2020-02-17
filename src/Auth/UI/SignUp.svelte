@@ -31,7 +31,7 @@
     }
 
     promise = signup(email, password);
-    promise.timeout(2000).then(hideModal);
+    promise.then(timeout(2000)).then(hideModal);
   }
 </script>
 

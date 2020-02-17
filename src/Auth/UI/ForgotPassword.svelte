@@ -2,6 +2,7 @@
   import { createEventDispatcher } from "svelte";
   import { requestPasswordRecovery } from "../auth-store";
   import { isValidEmail } from "../../Util/validation";
+  import { timeout } from "../../Util/asyncAwait";
 
   let dispatch = createEventDispatcher();
 
@@ -25,11 +26,9 @@
 
   function onSubmit() {
     forgotPasswordPromise = requestPasswordRecovery(email);
-    forgotPasswordPromise.then(() => {
-      setTimeout(function() {
-        show = false;
-        dispatch("forgot-password-requested");
-      }, 3000);
+    forgotPasswordPromise.then(timeout(3000)).finally(() => {
+      show = false;
+      dispatch("forgot-password-requested");
     });
   }
 </script>

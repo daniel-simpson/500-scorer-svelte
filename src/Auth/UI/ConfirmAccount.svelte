@@ -15,7 +15,7 @@
     }
 
     promise = confirm(token);
-    promise.timeout(2000).finally(() => {
+    promise.then(timeout(2000)).finally(() => {
       window.location.hash = "";
     });
   });
