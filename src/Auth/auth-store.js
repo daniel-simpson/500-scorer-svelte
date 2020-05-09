@@ -10,8 +10,8 @@ const goTrueUser = goTrueInstance.currentUser() || undefined;
 
 export const user = writable(goTrueUser);
 
-export function signup(email, password) {
-  return goTrueInstance.signup(email, password);
+export function signup(email, password, data) {
+  return goTrueInstance.signup(email, password, data);
 }
 
 export function confirm(token) {
@@ -43,11 +43,9 @@ export async function updateUserSecuritySettings(email, password) {
   }
 }
 
-export async function updateUserCustomSettings(fullname) {
+export async function updateUserCustomSettings(data) {
   try {
-    const updatedUser = await goTrueUser.update({
-      data: { fullname: fullname }
-    });
+    const updatedUser = await goTrueUser.update(data);
 
     user.update(() => updatedUser);
   } catch (e) {

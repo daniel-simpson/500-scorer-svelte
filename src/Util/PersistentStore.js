@@ -1,11 +1,13 @@
 import { writable } from "svelte/store";
 
+import { getItem, setItem } from "localforage";
+
 const isBrowser = typeof window !== undefined;
 
 export default (key, init) => {
   let initialValue = init;
   if (isBrowser) {
-    let storedValue = localStorage.getItem(key);
+    let storedValue = getItem(key);
 
     try {
       initialValue = storedValue !== undefined ? JSON.parse(storedValue) : init;
@@ -19,7 +21,7 @@ export default (key, init) => {
   if (isBrowser) {
     store.subscribe(val => {
       if (!!val) {
-        localStorage.setItem(key, JSON.stringify(val));
+        setItem(key, JSON.stringify(val));
       }
     });
   }
